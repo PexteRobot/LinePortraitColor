@@ -17,7 +17,7 @@ class GCodeExporter {
     println("Exporting to " + file.getAbsolutePath());
     try {
       writer = new BufferedWriter(new FileWriter(file));
-      go(writer, 0, 0, 1);
+      go(writer, 0, 0, UP);
       for(PlotterCommand plotterCommand : plotter.getPlot()){
         if(plotterCommand instanceof ColorPlotterCommand){
           ColorPlotterCommand colorPlotterCommand = (ColorPlotterCommand) plotterCommand;          
@@ -72,19 +72,16 @@ class GCodeExporter {
   }
 
   void goFast(BufferedWriter writer, double x, double y, double z) throws IOException {
-    y = plotterAreaHeight - y;
     writer.write("G00 X");
-    writer.write(String.valueOf((int)x));
-    writer.write(" Y");
-    writer.write(String.valueOf(plotterAreaHeight - (int)y));
-    writer.write(" Z");
-    writer.write(String.valueOf((int)z));
-    writer.newLine();
+    finishGoLine(writer, x, y, z);
   }
 
   void go(BufferedWriter writer, double x, double y, double z) throws IOException {
-    y = plotterAreaHeight - y;
     writer.write("G01 X");
+    finishGoLine(writer, x, y, z);
+  }
+  
+  void finishGoLine(BufferedWriter writer, double x, double y, double z) throws IOException {
     writer.write(String.valueOf((int)x));
     writer.write(" Y");
     writer.write(String.valueOf(plotterAreaHeight - (int)y));

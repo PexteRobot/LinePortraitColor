@@ -28,7 +28,7 @@ class Plotter {
       int colorAge = maxColorAge + 1;
       for (int y = 0; y < indexedImage.length; y+= imagePixelStepY) {
         Point2D start = null;
-        for (int x = 0; x < indexedImage[y].length; x++) {
+        for (int x = 0; x < indexedImage[y].length; x+= halfBrushSize) {
           int imageColor = indexedImage[y][x];
           if(imageColor == brushColorIndex){
             if(start == null) {

@@ -16,7 +16,8 @@ void setup() {
 
   size (600, 600);
   background(255);
-  img = loadImage("palitra12f.jpg");
+  // img = loadImage("palitra12f.jpg");
+  img = loadImage("palitra12f.png");
 
   Plotter plotter = new Plotter(2, 20);
   plotter.buildPlot(img);
