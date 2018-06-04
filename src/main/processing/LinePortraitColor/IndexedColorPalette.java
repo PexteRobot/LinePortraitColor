@@ -1,23 +1,23 @@
 class IndexedColorPalette {
-  private final color[] colors;
-  private int skippedColorIndex;
+  public final Color[] colors;
+  public int skippedColorIndex;
   
   IndexedColorPalette() {
     skippedColorIndex = 0;
-    colors = new color[]{
-      color(0xff, 0xff, 0xff),
-      color(0x86, 0xa8, 0x3b),
-      color(0xb3, 0x9a, 0x10),
-      color(0x89, 0x7e, 0x15),
-      color(0xc1, 0x83, 0x3b),
-      color(0xca, 0x46, 0x30),
-      color(0x87, 0x30, 0x47),
-      color(0xac, 0x36, 0x48),
-      color(0x87, 0x3d, 0x21),
-      color(0x96, 0x5c, 0x1f),
-      color(0x89, 0x7d, 0x1c),
-      color(0x31, 0x33, 0x3d),
-      color(0x6e, 0x7d, 0x9a)
+    colors = new Color[]{
+      new Color(0xff, 0xff, 0xff),
+            new Color(0x86, 0xa8, 0x3b),
+            new Color(0xb3, 0x9a, 0x10),
+            new Color(0x89, 0x7e, 0x15),
+            new Color(0xc1, 0x83, 0x3b),
+            new Color(0xca, 0x46, 0x30),
+            new Color(0x87, 0x30, 0x47),
+            new Color(0xac, 0x36, 0x48),
+            new Color(0x87, 0x3d, 0x21),
+            new Color(0x96, 0x5c, 0x1f),
+            new Color(0x89, 0x7d, 0x1c),
+            new Color(0x31, 0x33, 0x3d),
+            new Color(0x6e, 0x7d, 0x9a)
       
       //color(0xd4, 0xc7, 0x01),
       //color(0xbe, 0x54, 0x00),
@@ -41,21 +41,21 @@ class IndexedColorPalette {
     };
   }
   
-  int[][] indexColors(PImage img) {
-    int[][] result = new int[img.height][img.width];
+  int[][] indexColors(Color[][] img) {
+    int[][] result = new int[img.length][img[0].length];
     for(int i = 0; i < result.length; i++){
       for(int j = 0; j < result[i].length; j++){
-        result[i][j] = findClosestColorIndex(img.pixels[i * img.width + j]);
+        result[i][j] = findClosestColorIndex(img[i][j]);
       }
     }
     return result;
   }
   
-  int findClosestColorIndex(color c) {
+  int findClosestColorIndex(Color c) {
     double minDistance = Double.MAX_VALUE;
     int result = -1;
     for(int i = 0; i < colors.length; i++) {
-      color paletteColor = colors[i];
+      Color paletteColor = colors[i];
       double distance = calculateColorDistance(c, paletteColor);
       if(distance < minDistance) {
         minDistance = distance;
@@ -67,12 +67,12 @@ class IndexedColorPalette {
     return result;
   }
   
-  double calculateColorDistance(color c1, color c2){
-    return Math.abs(red(c1) - red(c2)) + Math.abs(green(c1) - green(c2)) + Math.abs(blue(c1) - blue(c2));
-    //return Math.pow(red(c1) - red(c2), 2) + Math.pow(green(c1) - green(c2), 2) + Math.pow(blue(c1) - blue(c2), 2);
+  double calculateColorDistance(Color c1, Color c2){
+    //return Math.abs(c1.red - c2.red) + Math.abs(c1.green - c2.green) + Math.abs(c1.blue - c2.blue);
+    return Math.pow(c1.red - c2.red, 2) + Math.pow(c1.green - c2.green, 2) + Math.pow(c1.blue - c2.blue, 2);
   }
   
-  color getColorByIndex(int index) {
+  Color getColorByIndex(int index) {
     return colors[index];
   }
 }

@@ -24,7 +24,8 @@ class PlotterVisualizer {
     PlotterCommand plotterCommand = plotter.getPlot().get(commandIndex++);
     if(plotterCommand instanceof ColorPlotterCommand){
       ColorPlotterCommand colorPlotterCommand = (ColorPlotterCommand) plotterCommand;
-      color c = plotter.indexedColorPalette.getColorByIndex(colorPlotterCommand.indexedColor);
+      Color c1 = plotter.indexedColorPalette.getColorByIndex(colorPlotterCommand.indexedColor);
+      color c = color(c1.red, c1.green, c1.blue);
       
       strokeWeight((int)plotter.brushSize * 2);
       stroke(c);
@@ -44,11 +45,12 @@ class PlotterVisualizer {
   }
   
   void drawStaticObjects(){
+    println("Drawing static objects");
     stroke(color(0, 0, 0));
     strokeWeight(1);
     fill(255, 255, 255);
     draw(plotter.canvas);
-    color[] colors = plotter.palette.indexedColorPalette.colors;
+    Color[] colors = plotter.palette.indexedColorPalette.colors;
     for(int i = 0; i < colors.length; i++){
       drawPaintBucket(plotter.palette.getIndexedColorRect(i)); 
     }
