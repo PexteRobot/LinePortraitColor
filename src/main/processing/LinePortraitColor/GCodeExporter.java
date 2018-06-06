@@ -22,7 +22,8 @@ class GCodeExporter {
     System.out.println("Exporting to " + file.getAbsolutePath());
     try {
       writer = new BufferedWriter(new FileWriter(file));
-      go(writer, 0, 0, UP);
+      initPlotter(writer);
+      go(writer, 0, plotterAreaHeight, UP);
       for(PlotterCommand plotterCommand : plotter.getPlot()){
         if(plotterCommand instanceof ColorPlotterCommand){
           ColorPlotterCommand colorPlotterCommand = (ColorPlotterCommand) plotterCommand;          
@@ -74,6 +75,13 @@ class GCodeExporter {
       goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * ANTI_MARGIN, BUCKET_DOWN);
       goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * ANTI_MARGIN, UP);
     }
+  }
+
+  void initPlotter(BufferedWriter writer) throws IOException {
+    writer.write("M90\n" +
+            "M21\n" +
+            "G00\n" +
+            "F8000\n");
   }
 
   void goFast(BufferedWriter writer, double x, double y, double z) throws IOException {
