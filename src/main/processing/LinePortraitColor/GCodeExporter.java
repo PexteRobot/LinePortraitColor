@@ -1,3 +1,8 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 class GCodeExporter {
   final Plotter plotter;
   final int plotterAreaWidth;
@@ -14,7 +19,7 @@ class GCodeExporter {
   }
   void export(File file) {
     BufferedWriter writer = null;
-    println("Exporting to " + file.getAbsolutePath());
+    System.out.println("Exporting to " + file.getAbsolutePath());
     try {
       writer = new BufferedWriter(new FileWriter(file));
       go(writer, 0, 0, UP);
