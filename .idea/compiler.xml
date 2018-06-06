@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="line-portrait-color" target="1.5" />
+      <module name="line-portrait-color" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
