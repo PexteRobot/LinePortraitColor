@@ -18,17 +18,15 @@ class GCodeExporter {
     this.plotterAreaHeight = plotterAreaHeight;
   }
   void export(File file) {
-    BufferedWriter writer = null;
     System.out.println("Exporting to " + file.getAbsolutePath());
-    try {
-      writer = new BufferedWriter(new FileWriter(file));
+    try (FileWriter fileWriter = new FileWriter(file); BufferedWriter writer = new BufferedWriter(fileWriter)){
       initPlotter(writer);
       go(writer, 0, plotterAreaHeight, UP);
       for(PlotterCommand plotterCommand : plotter.getPlot()){
         if(plotterCommand instanceof ColorPlotterCommand){
-          ColorPlotterCommand colorPlotterCommand = (ColorPlotterCommand) plotterCommand;          
+          ColorPlotterCommand colorPlotterCommand = (ColorPlotterCommand) plotterCommand;
           putIntoWater(writer);
-          putIntoPaint(writer, colorPlotterCommand);          
+          putIntoPaint(writer, colorPlotterCommand);
         }
         else if(plotterCommand instanceof PathPlotterCommand){
           PathPlotterCommand pathPlotterCommand = (PathPlotterCommand) plotterCommand;
@@ -38,14 +36,6 @@ class GCodeExporter {
     }
     catch(IOException e){
       throw new RuntimeException(e);
-    }
-    finally{
-      if(writer != null) {
-        try{
-          writer.close();
-        }
-        catch(IOException e){}
-      }
     }
   }
   void putIntoWater(BufferedWriter writer) throws IOException {
