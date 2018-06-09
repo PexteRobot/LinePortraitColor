@@ -20,8 +20,14 @@ void setup() {
   img = loadImage("palitra12f.png");
   //img = loadImage("agatha.png");
 
-  Plotter plotter = new Plotter(1, 2, 20);
-  plotter.buildPlot(convertImage(img));
+  ImagingConfig imagingConfig = new ImagingConfig();
+  imagingConfig.brushSize = 2;
+  imagingConfig.maxColorAge = 20;
+  Plotter plotter = new Plotter(1, imagingConfig);
+
+  PlotterCommandStrategy plotterCommandStrategy = new SimplePlotterCommandStrategy();
+
+  plotter.buildPlot(convertImage(img), plotterCommandStrategy);
   plotterVisualizer = new PlotterVisualizer(plotter);
   new GCodeExporter(plotter, 210, 290).export(new File("g-codes.txt"));
 }

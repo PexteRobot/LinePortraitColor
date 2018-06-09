@@ -8,7 +8,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PlotterTest {
+    ImagingConfig imagingConfig;
+
     Plotter plotter;
+    PlotterCommandStrategy plotterCommandStrategy;
 
     int color1index;
     Color color1;
@@ -20,7 +23,13 @@ public class PlotterTest {
 
     @Before
     public void setup(){
-        plotter = new Plotter(1, 2, 2);
+        imagingConfig = new ImagingConfig();
+        imagingConfig.brushSize = 2;
+        imagingConfig.maxColorAge = 2;
+
+        plotter = new Plotter(1, imagingConfig);
+
+        plotterCommandStrategy = new SimplePlotterCommandStrategy();
 
         color1index = 1;
         color1 = plotter.indexedColorPalette.colors[color1index];
@@ -35,7 +44,7 @@ public class PlotterTest {
     public void test1pixelImageSize11(){
         Color[][] image = buildImage(1, 1, color1, 0, 0, 1, 1);
 
-        plotter.buildPlot(image);
+        plotter.buildPlot(image, plotterCommandStrategy);
         ArrayList<PlotterCommand> plot = plotter.getPlot();
 
         assertTrue(plot.isEmpty()); // there is no way to paint 1 mixel with 2 pixel brush
@@ -45,7 +54,7 @@ public class PlotterTest {
     public void test2pixelImageSize22(){
         Color[][] image = buildImage(2, 2, color1, 0, 0, 2, 2);
 
-        plotter.buildPlot(image);
+        plotter.buildPlot(image, plotterCommandStrategy);
         ArrayList<PlotterCommand> plot = plotter.getPlot();
 
         assertEquals(
@@ -62,7 +71,7 @@ public class PlotterTest {
     public void test2pixelImageSize22padding(){
         Color[][] image = buildImage(2, 3, color1, 0, 1, 2, 2);
 
-        plotter.buildPlot(image);
+        plotter.buildPlot(image, plotterCommandStrategy);
         ArrayList<PlotterCommand> plot = plotter.getPlot();
 
         assertEquals(
@@ -79,7 +88,7 @@ public class PlotterTest {
     public void test2pixelImageSize32(){
         Color[][] image = buildImage(2, 3, color1, 0, 0, 2, 3);
 
-        plotter.buildPlot(image);
+        plotter.buildPlot(image, plotterCommandStrategy);
         ArrayList<PlotterCommand> plot = plotter.getPlot();
 
         assertEquals(
@@ -96,7 +105,7 @@ public class PlotterTest {
     public void test2pixelImageSize62(){
         Color[][] image = buildImage(2, 6, color1, 0, 0, 2, 6);
 
-        plotter.buildPlot(image);
+        plotter.buildPlot(image, plotterCommandStrategy);
         ArrayList<PlotterCommand> plot = plotter.getPlot();
 
         assertEquals(
@@ -115,7 +124,7 @@ public class PlotterTest {
         Color[][] image = buildImage(2, 4, color1, 0, 0, 2, 2);
         fillColor(image, color2, 0, 2, 2, 2);
 
-        plotter.buildPlot(image);
+        plotter.buildPlot(image, plotterCommandStrategy);
         ArrayList<PlotterCommand> plot = plotter.getPlot();
 
         assertEquals(
