@@ -44,13 +44,20 @@ class GCodeExporter {
   
   void putIntoPaint(BufferedWriter writer, ColorPlotterCommand colorPlotterCommand) throws IOException {
     Rect colorBucket = plotter.palette.getIndexedColorRect(colorPlotterCommand.indexedColor);
-    goDownShakeUp(writer, colorBucket);
+    goDownUp(writer, colorBucket);
   }
   void drawLine(BufferedWriter writer, PathPlotterCommand pathPlotterCommand) throws IOException {
     go(writer, pathPlotterCommand.x1, pathPlotterCommand.y1, UP);
     go(writer, pathPlotterCommand.x1, pathPlotterCommand.y1, CANVAS_DOWN);
-    go(writer, pathPlotterCommand.x2, pathPlotterCommand.y2, CANVAS_DOWN);
+    if(pathPlotterCommand.x1 != pathPlotterCommand.x2 && pathPlotterCommand.y1 != pathPlotterCommand.y2) {
+      go(writer, pathPlotterCommand.x2, pathPlotterCommand.y2, CANVAS_DOWN);
+    }
     go(writer, pathPlotterCommand.x2, pathPlotterCommand.y2, UP);
+  }
+  void goDownUp(BufferedWriter writer, Rect rect) throws IOException {
+    goFast(writer, rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, UP);
+    goFast(writer, rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, BUCKET_DOWN);
+    goFast(writer, rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, UP);
   }
   void goDownShakeUp(BufferedWriter writer, Rect rect) throws IOException {
     if(rect.width >= rect.height){

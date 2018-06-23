@@ -26,8 +26,9 @@ public class PlotterTest {
         imagingConfig = new ImagingConfig();
         imagingConfig.brushSize = 2;
         imagingConfig.maxColorAge = 2;
+        imagingConfig.maxStrokeLength = 10;
 
-        plotter = new Plotter(1, imagingConfig);
+        plotter = new Plotter(imagingConfig);
 
         plotterCommandStrategy = new SimplePlotterCommandStrategy();
 
@@ -133,6 +134,48 @@ public class PlotterTest {
                         new PathPlotterCommand(1, 1, 1, 1),
                         color2plotterCommand,
                         new PathPlotterCommand(3, 1, 3, 1)
+                ),
+                plot
+        );
+        System.out.println(plot);
+    }
+
+    @Test
+    public void test2pixelImageSize4(){
+        imagingConfig.maxColorAge = 10;
+        imagingConfig.maxStrokeLength = 10;
+
+        Color[][] image = buildImage(2, 10, color1, 0, 2, 2, 8);
+
+        plotter.buildPlot(image, plotterCommandStrategy);
+        ArrayList<PlotterCommand> plot = plotter.getPlot();
+
+        assertEquals(
+                Arrays.asList(
+                        color1plotterCommand,
+                        new PathPlotterCommand(3, 1, 9, 1)
+                ),
+                plot
+        );
+        System.out.println(plot);
+    }
+
+    @Test
+    public void test2pixelImageSize42(){
+        imagingConfig.maxColorAge = 10;
+        imagingConfig.maxStrokeLength = 1;
+
+        Color[][] image = buildImage(2, 10, color1, 0, 2, 2, 8);
+
+        plotter.buildPlot(image, plotterCommandStrategy);
+        ArrayList<PlotterCommand> plot = plotter.getPlot();
+
+        assertEquals(
+                Arrays.asList(
+                        color1plotterCommand,
+                        new PathPlotterCommand(3, 1, 4, 1),
+                        new PathPlotterCommand(5, 1, 7, 1),
+                        new PathPlotterCommand(8, 1, 9, 1)
                 ),
                 plot
         );

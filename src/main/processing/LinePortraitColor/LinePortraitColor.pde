@@ -23,7 +23,8 @@ void setup() {
   ImagingConfig imagingConfig = new ImagingConfig();
   imagingConfig.brushSize = 2;
   imagingConfig.maxColorAge = 20;
-  Plotter plotter = new Plotter(1, imagingConfig);
+  imagingConfig.maxStrokeLength = 1;
+  Plotter plotter = new Plotter(imagingConfig);
 
   PlotterCommandStrategy plotterCommandStrategy = new SimplePlotterCommandStrategy();
 

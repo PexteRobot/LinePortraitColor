@@ -27,7 +27,7 @@ class PlotterVisualizer {
       Color c1 = plotter.indexedColorPalette.getColorByIndex(colorPlotterCommand.indexedColor);
       color c = color(c1.red, c1.green, c1.blue);
       
-      strokeWeight((int)plotter.brushSize * 2);
+      strokeWeight((int)plotter.imagingConfig.brushSize * 2);
       stroke(c);
       
       Rect colorBucket = plotter.palette.getIndexedColorRect(colorPlotterCommand.indexedColor);
@@ -35,7 +35,7 @@ class PlotterVisualizer {
     }
     else if(plotterCommand instanceof PathPlotterCommand){
       PathPlotterCommand pathPlotterCommand = (PathPlotterCommand) plotterCommand;
-      strokeWeight((int)plotter.brushSize);
+      strokeWeight((int)plotter.imagingConfig.brushSize);
       line((float)pathPlotterCommand.x1, (float)pathPlotterCommand.y1, (float)pathPlotterCommand.x2, (float)pathPlotterCommand.y2);
     }
   }
