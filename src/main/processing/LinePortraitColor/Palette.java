@@ -1,6 +1,6 @@
 class Palette extends Rect {
   final static int width = 20;
-  final static int bucketHeight = 18;
+  final static int bucketHeight = 17;
   final static int bucketGap = 2;
   final IndexedColorPalette indexedColorPalette;
   Palette(int x, int y, IndexedColorPalette indexedColorPalette){

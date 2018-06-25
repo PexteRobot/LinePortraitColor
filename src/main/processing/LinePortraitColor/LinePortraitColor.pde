@@ -17,12 +17,15 @@ void setup() {
   size (600, 600);
   background(255);
   // img = loadImage("palitra12f.jpg");
-  img = loadImage("palitra12f.png");
+   //img = loadImage("palitra12f.png");
+  //img = loadImage("GR24.png");
   //img = loadImage("agatha.png");
+  //img = loadImage("natash-aqua.png");
+  img = loadImage("natash-aqua-sharp.png");
 
   ImagingConfig imagingConfig = new ImagingConfig();
-  imagingConfig.brushSize = 2;
-  imagingConfig.maxColorAge = 20;
+  imagingConfig.brushSize = 1;
+  imagingConfig.maxColorAge = 80;
   imagingConfig.maxStrokeLength = 1;
   Plotter plotter = new Plotter(imagingConfig);
 

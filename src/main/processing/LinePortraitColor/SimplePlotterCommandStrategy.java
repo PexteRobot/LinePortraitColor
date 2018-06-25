@@ -40,7 +40,7 @@ public class SimplePlotterCommandStrategy implements PlotterCommandStrategy {
                         if(start == null) {
                             if(!(lImageColor != imageColor && rImageColor == imageColor)) {
                                 if (colorAge == 0) {
-                                    System.out.println("age=" + colorAge);
+                                    System.out.println("age=" + colorAge+ " color=" + brushColorIndex);
                                     plot.add(new ColorPlotterCommand(brushColorIndex));
                                     colorAge = 0;
                                 }
@@ -53,11 +53,12 @@ public class SimplePlotterCommandStrategy implements PlotterCommandStrategy {
                         else if (strokeLength >= imagingConfig.maxStrokeLength){
                             strokeLength = 0;
                             plot.add(new PathPlotterCommand(start.x, start.y, x, y));
-                            start = new Point2D(x + halfBrushSize, y);
-                            colorAge++;
                             x += brushSize;
+                            start = new Point2D(x, y);
+                            colorAge++;
                         }
                         else if (colorAge >= maxColorAge){
+                            System.out.println("age=" + colorAge+ " color=" + brushColorIndex);
                             colorAge = 0;
                             strokeLength = 0;
                             plot.add(new ColorPlotterCommand(brushColorIndex));

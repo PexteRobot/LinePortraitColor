@@ -20,8 +20,8 @@ public class Plotter {
     indexedColorPalette = new IndexedColorPalette();
     
     canvas = new Rect(0, 0, 210, 290);
-    palette = new Palette(-45 , 40, indexedColorPalette);
-    water = new Rect(-100, 40, 20, 150);
+    palette = new Palette(-65 , 5, indexedColorPalette);
+    water = new Rect(-90, 25, 20, 140);
   }
   void buildPlot(Color[][] image, PlotterCommandStrategy plotterCommandStrategy){
     this.plot = plotterCommandStrategy.generatePlotterCommands(image, imagingConfig, canvas, indexedColorPalette);

@@ -9,9 +9,11 @@ class GCodeExporter {
   final int plotterAreaHeight;
   final float MARGIN = 0.2F;
   final float ANTI_MARGIN = 1 - MARGIN;
-  final int UP = 5;
-  final int CANVAS_DOWN = -1;
-  final int BUCKET_DOWN = -2;
+  final int UP = 8;
+  final double CANVAS_DOWN = -0.2;
+  final double BUCKET_DOWN = -2;
+  final double WATER_DOWN = -4;
+
   GCodeExporter(Plotter plotter, int plotterAreaWidth, int plotterAreaHeight){
     this.plotter = plotter;
     this.plotterAreaWidth = plotterAreaWidth;
@@ -22,10 +24,14 @@ class GCodeExporter {
     try (FileWriter fileWriter = new FileWriter(file); BufferedWriter writer = new BufferedWriter(fileWriter)){
       initPlotter(writer);
       go(writer, 0, plotterAreaHeight, UP);
+      int currentColor = -1;
       for(PlotterCommand plotterCommand : plotter.getPlot()){
         if(plotterCommand instanceof ColorPlotterCommand){
           ColorPlotterCommand colorPlotterCommand = (ColorPlotterCommand) plotterCommand;
-          putIntoWater(writer);
+          if(colorPlotterCommand.indexedColor != currentColor) {
+            currentColor = colorPlotterCommand.indexedColor;
+            putIntoWater(writer);
+          }
           putIntoPaint(writer, colorPlotterCommand);
         }
         else if(plotterCommand instanceof PathPlotterCommand){
@@ -39,12 +45,12 @@ class GCodeExporter {
     }
   }
   void putIntoWater(BufferedWriter writer) throws IOException {
-    goDownShakeUp(writer, plotter.water);
+    goDownShakeUp(writer, plotter.water, WATER_DOWN);
   }
   
   void putIntoPaint(BufferedWriter writer, ColorPlotterCommand colorPlotterCommand) throws IOException {
     Rect colorBucket = plotter.palette.getIndexedColorRect(colorPlotterCommand.indexedColor);
-    goDownUp(writer, colorBucket);
+    goDownUp(writer, colorBucket, BUCKET_DOWN);
   }
   void drawLine(BufferedWriter writer, PathPlotterCommand pathPlotterCommand) throws IOException {
     go(writer, pathPlotterCommand.x1, pathPlotterCommand.y1, UP);
@@ -54,22 +60,24 @@ class GCodeExporter {
     }
     go(writer, pathPlotterCommand.x2, pathPlotterCommand.y2, UP);
   }
-  void goDownUp(BufferedWriter writer, Rect rect) throws IOException {
+  void goDownUp(BufferedWriter writer, Rect rect, double down) throws IOException {
     goFast(writer, rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, UP);
-    goFast(writer, rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, BUCKET_DOWN);
+    goFast(writer, rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, down);
     goFast(writer, rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, UP);
   }
-  void goDownShakeUp(BufferedWriter writer, Rect rect) throws IOException {
+  void goDownShakeUp(BufferedWriter writer, Rect rect, double down) throws IOException {
     if(rect.width >= rect.height){
       goFast(writer, rect.x + rect.width * MARGIN, rect.y + rect.height / 2, UP);
-      goFast(writer, rect.x + rect.width * MARGIN, rect.y + rect.height / 2, BUCKET_DOWN);
-      goFast(writer, rect.x + rect.width * ANTI_MARGIN, rect.y + rect.height / 2, BUCKET_DOWN);
+      goFast(writer, rect.x + rect.width * MARGIN, rect.y + rect.height / 2, down);
+      goFast(writer, rect.x + rect.width, rect.y + rect.height / 2, down);
+      goFast(writer, rect.x + rect.width * ANTI_MARGIN, rect.y + rect.height / 2, down);
       goFast(writer, rect.x + rect.width * ANTI_MARGIN, rect.y + rect.height / 2, UP);
     }
     else{
       goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * MARGIN, UP);
-      goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * MARGIN, BUCKET_DOWN);
-      goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * ANTI_MARGIN, BUCKET_DOWN);
+      goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * MARGIN, down);
+      goFast(writer, rect.x + rect.width / 2, rect.y + rect.height, down);
+      goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * ANTI_MARGIN, down);
       goFast(writer, rect.x + rect.width / 2, rect.y + rect.height * ANTI_MARGIN, UP);
     }
   }
@@ -96,7 +104,7 @@ class GCodeExporter {
     writer.write(" Y");
     writer.write(String.valueOf(plotterAreaHeight - (int)y));
     writer.write(" Z");
-    writer.write(String.valueOf((int)z));
+    writer.write(String.valueOf(z));
     writer.newLine();
   }
 }
