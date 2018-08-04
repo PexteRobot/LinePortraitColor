@@ -3,6 +3,8 @@ import java.io.Writer;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 
+// version: 0.1
+
 PImage img;
 int steps = 5;
 float threshold = 1.0; 
@@ -25,8 +27,8 @@ void setup() {
 
   ImagingConfig imagingConfig = new ImagingConfig();
   imagingConfig.brushSize = 1;
-  imagingConfig.maxColorAge = 80;
-  imagingConfig.maxStrokeLength = 1;
+  imagingConfig.maxColorAge = 100;
+  imagingConfig.maxStrokeLength = 100;
   Plotter plotter = new Plotter(imagingConfig);
 
   PlotterCommandStrategy plotterCommandStrategy = new SimplePlotterCommandStrategy();
