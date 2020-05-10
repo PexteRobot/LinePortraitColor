@@ -39,6 +39,7 @@ class GCodeExporter {
           drawLine(writer, pathPlotterCommand);
         }
       }
+      closePlotter(writer);
     }
     catch(IOException e){
       throw new RuntimeException(e);
@@ -83,9 +84,9 @@ class GCodeExporter {
   }
 
   void initPlotter(BufferedWriter writer) throws IOException {
-    writer.write("M90\n" +
-            "M21\n" +
-            "G00\n" +
+    writer.write("G90\n" +
+            "G21\n" +
+            "G00 X0 Y0 Z0\n" +
             "F8000\n");
   }
 
@@ -106,5 +107,10 @@ class GCodeExporter {
     writer.write(" Z");
     writer.write(String.valueOf(z));
     writer.newLine();
+  }
+  
+    void closePlotter(BufferedWriter writer) throws IOException {
+    writer.write("G00 Z5\n" +
+            "G00 X0 Y0\n");
   }
 }
